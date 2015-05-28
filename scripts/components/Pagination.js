@@ -8,37 +8,34 @@
 
     SolrWidget.Pagination = {
 
-        controller: function(args, e){            
-
-            /* Current page */
-
-            this.page = args.currentPage();
+        controller: function(args){            
 
             /* Total pages */
 
             this.totalPages = function(){
 
                 return Math.ceil(args.numFound()/args.perPage())
-            }
+            
+            }.bind(this)
 
             /**
              * Page list
              */
             
-            this.pageList = function(){            
-
+            this.pageList = function(current){            
+                
                 var p = [],
+                    totalPages = this.totalPages(),
                     start = 0,
                     end = this.totalPages(),
-                    left = Math.max(parseInt(this.page) - pageOptions.edges, 0),
-                    right = Math.min(parseInt(this.page) + pageOptions.edges, this.totalPages())
-                
+                    left = Math.max(parseInt(current) - pageOptions.edges, 0),
+                    right = Math.min(parseInt(current) + pageOptions.edges, totalPages)                
 
                 for(var i = start; i < end; i ++){
                     
                     if( i == 0 
-                        || i == parseInt(this.totalPages()) - 1 
-                        || this.totalPages() < pageOptions.limit){
+                        || i == parseInt(totalPages) - 1 
+                        || totalPages < pageOptions.limit){
 
                         p.push(i)
 
@@ -59,17 +56,18 @@
         
 
         view: function(ctrl, args){
-            
+
             return m('nav.msolr-pages', {                
                 style: {
                     display: ctrl.pageList().length > 1?  '': 'none'
                 }
-            },[
+            },[                
                 m('a.previous', {
                     onclick: args.prevPage.bind(this, ctrl.totalPages()),
-                    className: ctrl.page == 0? 'page-disabled': ''
+                    className: args.currentPage() == 0? 'page-disabled': ''
                 }, 'Prev'),
-                ctrl.pageList().map(function(page){
+
+                ctrl.pageList(args.currentPage()).map(function(page){
                     
                     switch(page){
                         
@@ -80,16 +78,17 @@
                         default:
                             return m('a', {                                
                                 onclick: args.changePage.bind(ctrl, parseInt(page)),
-                                className: page == ctrl.page? 'page-current': ''
+                                className: page == args.currentPage()? 'page-current': ''
                             }, parseInt(page) + 1)
                             break;
 
                     }
                     
                 }),
+                
                 m('a.next', {
                     onclick: args.nextPage.bind(this, ctrl.totalPages()),
-                    className: ctrl.page == (ctrl.totalPages() - 1)? 'page-disabled': ''
+                    className: args.currentPage() == (ctrl.totalPages() - 1)? 'page-disabled': ''
                 }, 'Next'),
             ]);
         }

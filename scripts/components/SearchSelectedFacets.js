@@ -12,32 +12,31 @@
              * Group facets based on value
              */
             
-            this.group = [];            
+
+            this.groups = function(facets){
+
+                var group = [];            
             
-            this.selections.map(function(facet){
+                facets.map(function(facet){
 
-                var split = facet.value.split(':'),
-                    type = split[0],
-                    name = split[1]
+                    var split = facet.value.split(':'),
+                        type = split[0],
+                        name = split[1]
 
-                self.group[type] = self.group[type] || [];
-                
-                self.group[type].push({
-                    name: name,
-                    value: type + ':' + name
-                })
-            });
+                    group[type] = group[type] || [];
+                    
+                    group[type].push({
+                        name: name,
+                        value: type + ':' + name
+                    })
+                });
 
+                return group
+            }
+            
             
 
-            this.getFacetName = function(value){
-
-            }
-
-            this.getFacetType = function(type){
-                
-            }
-
+            
         },
         facetList: function(arr, type, args){
 
@@ -54,15 +53,16 @@
 
         view: function(ctrl, args){
 
-            var facets = [];
+            var facets = [],
+                g = ctrl.groups(args.selectedFacets);
 
-            for(var i in ctrl.group){
-                if(ctrl.group.hasOwnProperty(i)){
+            for(var i in g){
+                if(g.hasOwnProperty(i)){
 
                     facets.push(
                         m('.msolr-selected-facet', [
                             m('h5', args.facetFields[i]),
-                            SolrWidget.SearchSelectedFacets.facetList(ctrl.group[i], i, args)
+                            SolrWidget.SearchSelectedFacets.facetList(g[i], i, args)
                         ])
                     )
                 }

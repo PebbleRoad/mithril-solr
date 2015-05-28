@@ -16,6 +16,17 @@ var SolrWidget = (function(SolrWidget, window, undefined){
     * Configurable parameters
     * q, rows, start
     */
+   
+   /**
+     * Base controller with diff redraw
+     */
+    
+    var BaseDiffController = function(constructor) {
+      return function() {
+        m.redraw.strategy("diff")
+        return constructor.apply(this, arguments)
+      }
+    }
 
     /**
      * Default Parameters
@@ -93,15 +104,16 @@ var SolrWidget = (function(SolrWidget, window, undefined){
      * @param  {[object]} args [description]
      * @return {[type]}      [description]
      */
-    SolrWidget.view = function(ctrl, args){
+    SolrWidget.view = function(ctrl, args){            
 
+            
             return m('.msolr', [
                 
                 m.component(SolrWidget.SearchForm, { 
                     onSubmit    : ctrl.route, 
                     isSearching : SolrWidget.vm.isSearching,
                     q           : SolrWidget.vm.q
-                }),
+                }),                
                 m('.msolr-content', [
                     m.component(SolrWidget.Pagination, {
                         perPage  : SolrWidget.vm.perPage,
@@ -127,14 +139,14 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                         q      : SolrWidget.vm.q,
                         isSearching : SolrWidget.vm.isSearching,
                     }),
-                    m.component(SolrWidget.Pagination, {
-                        perPage  : SolrWidget.vm.perPage,
-                        numFound : SolrWidget.vm.numFound,
-                        currentPage : SolrWidget.vm.currentPage,
-                        changePage: ctrl.changePage,
-                        nextPage: ctrl.nextPage,
-                        prevPage: ctrl.prevPage
-                    })
+                    // m.component(SolrWidget.Pagination, {
+                    //     perPage  : SolrWidget.vm.perPage,
+                    //     numFound : SolrWidget.vm.numFound,
+                    //     currentPage : SolrWidget.vm.currentPage,
+                    //     changePage: ctrl.changePage,
+                    //     nextPage: ctrl.nextPage,
+                    //     prevPage: ctrl.prevPage
+                    // })
                 ])
 
             ])            
@@ -146,7 +158,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
      * @param  {[type]} args [description]
      * @return {[type]}      [description]
      */
-    SolrWidget.controller = function(args){
+    SolrWidget.controller = new BaseDiffController(function(args){
 
             var self = this,
                 scope = SolrWidget.eventsMixin(this)
@@ -446,7 +458,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                 SolrWidget.vm.numFound(0);
                 SolrWidget.vm.currentPage(0);
             }
-    };
+    });
 
     /**
      * NOOP Callback
