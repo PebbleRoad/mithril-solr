@@ -406,26 +406,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                         url           : args.endPoint,
                         data          : data,
                         dataType      : 'jsonp',
-                        jsonpCallback : 'callback',
-                        xhr: function() {
-                            var xhr = new window.XMLHttpRequest();
-                            xhr.upload.addEventListener("progress", function(evt) {
-                                if (evt.lengthComputable) {
-                                    var percentComplete = evt.loaded / evt.total;
-                                    //Do something with upload progress here
-                                }
-                           }, false);
-
-                           xhr.addEventListener("progress", function(evt) {
-                               if (evt.lengthComputable) {
-                                   var percentComplete = evt.loaded / evt.total;
-                                   console.log(percentComplete)
-                                   //Do something with download progress
-                               }
-                           }, false);
-
-                           return xhr;
-                        }
+                        jsonpCallback : 'callback'                        
                     })
                     .done(function(results){
                         
