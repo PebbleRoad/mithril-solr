@@ -68,7 +68,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
             this.numFound = this.numFound || m.prop(0);
 
-            this.perPage = m.prop(20);
+            this.perPage = m.prop(m.route.param('rows') || 20);
 
             this.currentPage = m.prop(0);
 
@@ -210,6 +210,8 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     }
                 }
 
+                SolrWidget.vm.currentPage(0)
+
                 this.route()
 
             }.bind(this)
@@ -230,7 +232,9 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     name: 'fq',
                     value: type + ':\"' + f + '\"'
                 });
-                //console.log(this.selectedFacets)
+                
+                SolrWidget.vm.currentPage(0)
+
                 this.route()
 
             }.bind(this);
@@ -402,8 +406,26 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                         url           : args.endPoint,
                         data          : data,
                         dataType      : 'jsonp',
-                        jsonpCallback : 'callback'
+                        jsonpCallback : 'callback',
+                        xhr: function() {
+                            var xhr = new window.XMLHttpRequest();
+                            xhr.upload.addEventListener("progress", function(evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = evt.loaded / evt.total;
+                                    //Do something with upload progress here
+                                }
+                           }, false);
 
+                           xhr.addEventListener("progress", function(evt) {
+                               if (evt.lengthComputable) {
+                                   var percentComplete = evt.loaded / evt.total;
+                                   console.log(percentComplete)
+                                   //Do something with download progress
+                               }
+                           }, false);
+
+                           return xhr;
+                        }
                     })
                     .done(function(results){
                         
@@ -417,35 +439,39 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             }.bind(this)
 
             /* Fetch only if there is a query */
-            this.search();
-            // if(SolrWidget.vm.q()) {
-            //     this.search();
-            // }else{
-
-            //     /**
-            //      * Clear all docs
-            //      */
+            
+            if(SolrWidget.vm.q()) {
                 
-            //     SolrWidget.vm.docs([]);
+                this.search();
 
-            //     *
-            //      * Clear all facets
-                 
-                
-            //     SolrWidget.vm.facets({});
+            }else{
 
-            //     /**
-            //      * Clear numFound
-            //      */
+                /**
+                 * Clear all docs
+                 */
                 
-            //     SolrWidget.vm.numFound(0);
-            // }
+                SolrWidget.vm.docs([]);
+
+                /**
+                * Clear all facets
+                */
+                
+                SolrWidget.vm.facets({});
+
+                /**
+                 * Clear numFound
+                 */
+                
+                SolrWidget.vm.numFound(0);
+                SolrWidget.vm.currentPage(0);
+            }
     };
 
-
-    function callback(){
-        alert("As")
-    }
+    /**
+     * NOOP Callback
+     * @return {Function} [description]
+     */
+    function callback(){}
     
 
     return SolrWidget;

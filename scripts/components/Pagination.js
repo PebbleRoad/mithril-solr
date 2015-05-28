@@ -2,7 +2,8 @@
 
     var pageOptions = {        
         ellipsis : '&hellip;',
-        edges    : 2 
+        edges    : 2,
+        limit    : 10
     }
 
     SolrWidget.Pagination = {
