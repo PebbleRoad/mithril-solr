@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        title Document
+        link(href='//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css', rel="stylesheet")
+        style.
+            .container{
+                max-width: 960px;
+                margin: 0 auto;
+            }
+
+            #Search{
+                padding: 2em 0;
+            }
+
+            .msolr-filters{
+                float: left;
+                width: 30%;
+            }
+
+            .msolr-results{
+                margin-left: 35%;
+            }
+            
+            .msolr-pages{
+                padding: 1em;
+                text-align: right;
+            }
+            .msolr-pages a{
+                margin: 0 0.5em;
+                cursor: pointer
+            }
+
+            .msolr-pages .page-current{
+                font-weight: bold;
+            }
+
+            .msolr-pages .page-disabled{
+                opacity: 0.3;
+            }
+
+            .msolr-selected-facet{
+                background: #eee;
+                border: 1px #ddd solid;
+                padding: 1em;
+            }
+
+            .msolr-facet-count{
+                color: #ccc;
+                font-size: 14px;
+                float: right;
+            }
+
+            .msolr-selected-facet a{
+                cursor: pointer;
+                color: red;
+            }
+
+    body
+        .container
+            block content
+
+        
+        script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+        script(src="bower_components/mithril/mithril.js")        
+        script(src="scripts/app.js")
+        script(src="scripts/components/SearchForm.js")
+        script(src="scripts/components/SearchResults.js")
+        script(src="scripts/components/SearchFacets.js")
+        script(src="scripts/components/SearchSelectedFacets.js")
+        script(src="scripts/components/Pagination.js")
+        script(src="scripts/components/PubSub.js")
+        script.
+
+            /**
+             * Fields
+             */
+            
+            //- var fields = {
+            //-     title: 'invention_title_en',
+            //-     summary: 'abstract_en',
+            //-     url: 'resource_name'
+            //- }
+
+            var fields = {
+                title   : 'navigation_title_t',
+                summary : 'document_config_summary_t',
+                url     : 'navurl_s'
+            };
+
+            /**
+             * Facets
+             * @type {Object}
+             */
+            var facetFields = {
+                'contenttype_s': 'Content type',
+                'section_s': 'Section',
+                'year_s': 'Year'
+            }
+            
+            //- var facetFields = {
+            //-     'inventors_en': 'Inventors',
+            //-     'ipcr_classifications': 'ipcr_classifications',
+            //-     'kind_code': 'Kind'
+            //- }
+
+            var app = {
+                controller: function(){
+
+                    //this.endPoint = 'http://momcorp.internet.dynawebsite.com/solr/mom/lucid';
+                    this.endPoint = 'http://www.mom.gov.sg/solr/mom/lucid';
+
+                    this.facetFields = facetFields;
+
+                    this.fields = fields;
+                    
+                    //this.endPoint = 'http://prod1-1-elb-1mwm7bfw67zm3-1238985839.us-east-1.elb.amazonaws.com/solr/cn_patent/select';
+
+                },
+                view: function(ctrl){
+                    return [
+                        m.component(SolrWidget, {                            
+                            endPoint: ctrl.endPoint,
+                            facetFields: ctrl.facetFields,
+                            fields: ctrl.fields
+                        })
+                    ]
+                }
+            }
+            
+            /* Mount */
+    
+            m.route.mode = 'hash';
+            m.route(document.getElementById('Search'), '/search', {
+                '/search': app
+            });
