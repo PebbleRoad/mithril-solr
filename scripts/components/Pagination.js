@@ -12,9 +12,9 @@
 
             /* Total pages */
 
-            this.totalPages = function(){
+            this.totalPages = function(perPage){
 
-                return Math.ceil(args.numFound()/args.perPage())
+                return Math.ceil(args.numFound()/perPage)
             
             }.bind(this)
 
@@ -22,12 +22,12 @@
              * Page list
              */
             
-            this.pageList = function(current){            
+            this.pageList = function(current, perPage){            
                 
                 var p = [],
-                    totalPages = this.totalPages(),
+                    totalPages = this.totalPages(perPage),
                     start = 0,
-                    end = this.totalPages(),
+                    end = totalPages,
                     left = Math.max(parseInt(current) - pageOptions.edges, 0),
                     right = Math.min(parseInt(current) + pageOptions.edges, totalPages)                
 
@@ -57,17 +57,22 @@
 
         view: function(ctrl, args){
 
+            /* Page List */
+
+            var pageList = ctrl.pageList(args.currentPage(), args.perPage()),
+                totalPages = ctrl.totalPages(args.perPage());
+            
             return m('nav.msolr-pages', {                
                 style: {
-                    display: ctrl.pageList().length > 1?  '': 'none'
+                    display: pageList.length > 1?  '': 'none'
                 }
             },[                
                 m('a.previous', {
-                    onclick: args.prevPage.bind(this, ctrl.totalPages()),
+                    onclick: args.prevPage.bind(this, totalPages),
                     className: args.currentPage() == 0? 'page-disabled': ''
                 }, 'Prev'),
 
-                ctrl.pageList(args.currentPage()).map(function(page){
+                pageList.map(function(page){
                     
                     switch(page){
                         
@@ -87,8 +92,8 @@
                 }),
                 
                 m('a.next', {
-                    onclick: args.nextPage.bind(this, ctrl.totalPages()),
-                    className: args.currentPage() == (ctrl.totalPages() - 1)? 'page-disabled': ''
+                    onclick: args.nextPage.bind(this, totalPages),
+                    className: args.currentPage() == (totalPages - 1)? 'page-disabled': ''
                 }, 'Next'),
             ]);
         }

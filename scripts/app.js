@@ -17,15 +17,15 @@ var SolrWidget = (function(SolrWidget, window, undefined){
     * q, rows, start
     */
    
-   /**
-     * Base controller with diff redraw
-     */
+    /**
+    * Base controller with diff redraw
+    */
     
     var BaseDiffController = function(constructor) {
-      return function() {
-        m.redraw.strategy("diff")
-        return constructor.apply(this, arguments)
-      }
+        return function() {
+            m.redraw.strategy("diff")
+            return constructor.apply(this, arguments)
+        }
     }
 
     /**
@@ -45,10 +45,6 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             name: 'facet',
             value: 'true'
         }
-        // ,{
-        //     name: 'fq',
-        //     value: 'contenttype_s:eServices'
-        // }
     ];
 
     /**
@@ -81,6 +77,12 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
             this.perPage = m.prop(m.route.param('rows') || 20);
 
+            
+            /* Sorting */
+
+
+            /* Re-calculate Current Page */
+
             this.currentPage = m.prop(0);
 
             if(m.route.param('start') && m.route.param('rows')){
@@ -110,9 +112,10 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             return m('.msolr', [
                 
                 m.component(SolrWidget.SearchForm, { 
-                    onSubmit    : ctrl.route, 
+                    onSubmit    : ctrl.search, 
                     isSearching : SolrWidget.vm.isSearching,
-                    q           : SolrWidget.vm.q
+                    q           : SolrWidget.vm.q,
+                    numFound : SolrWidget.vm.numFound
                 }),                
                 m('.msolr-content', [
                     m.component(SolrWidget.Pagination, {
@@ -139,14 +142,14 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                         q      : SolrWidget.vm.q,
                         isSearching : SolrWidget.vm.isSearching,
                     }),
-                    // m.component(SolrWidget.Pagination, {
-                    //     perPage  : SolrWidget.vm.perPage,
-                    //     numFound : SolrWidget.vm.numFound,
-                    //     currentPage : SolrWidget.vm.currentPage,
-                    //     changePage: ctrl.changePage,
-                    //     nextPage: ctrl.nextPage,
-                    //     prevPage: ctrl.prevPage
-                    // })
+                    m.component(SolrWidget.Pagination, {
+                        perPage  : SolrWidget.vm.perPage,
+                        numFound : SolrWidget.vm.numFound,
+                        currentPage : SolrWidget.vm.currentPage,
+                        changePage: ctrl.changePage,
+                        nextPage: ctrl.nextPage,
+                        prevPage: ctrl.prevPage
+                    })
                 ])
 
             ])            
@@ -333,6 +336,17 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     value: SolrWidget.vm.currentPage() * SolrWidget.vm.perPage()
                 }];
 
+
+                /* Sorting */
+
+                // var sortParams = [{
+                //     name: 'sort',
+                //     value: 'navigation_title_t desc'
+                // }];
+
+
+                /* Merge params */
+
                 var params = [].concat.apply([], [
                     this.facetFields, 
                     defaultSolrParams, 
@@ -370,6 +384,10 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             
             this.search = function(){
 
+                /* Check if there is query */
+
+                if(!SolrWidget.vm.q()) return;
+
                 SolrWidget.vm.isSearching = true;
 
                 /* Fetch results from server */
@@ -397,7 +415,8 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     m.redraw()
 
                 })
-            }
+            
+            }.bind(this)
 
             /**
              * Check for Query
@@ -456,6 +475,9 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                  */
                 
                 SolrWidget.vm.numFound(0);
+
+                /* Set current page to zero */
+
                 SolrWidget.vm.currentPage(0);
             }
     });

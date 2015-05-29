@@ -20,7 +20,12 @@
                         placeholder: "Start typing to see instant results"
                     }),
                     m('button', args.isSearching? 'Searching' : 'Search')
-                ])
+                ]),
+                m('h3', {
+                    style: {
+                        display: args.numFound() > 0? '' : 'none'
+                    }
+                },args.numFound() + ' results found for ' + args.q())
             ])
         }
     }
