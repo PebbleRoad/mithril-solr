@@ -5,6 +5,19 @@ var gulp = require('gulp');
 // Load plugins
 var $ = require('gulp-load-plugins')();
 
+gulp.task('dist', function() {
+  gulp.src([
+      'scripts/app.js', 
+      'scripts/components/Pagination.js',
+      'scripts/components/SearchFacets.js',
+      'scripts/components/SearchForm.js',
+      'scripts/components/SearchResults.js',
+      'scripts/components/SearchSelectedFacets.js'
+    ])
+    .pipe($.concat('mithril.solr.min.js'))
+    .pipe($.uglify())
+    .pipe(gulp.dest('./'))
+});
 
 // Server
 gulp.task('connect', function() {

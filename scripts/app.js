@@ -17,6 +17,13 @@ var SolrWidget = (function(SolrWidget, window, undefined){
     * q, rows, start
     */
    
+
+   /**
+    * jQuery Functions used
+    * 1. $.ajax for JSONP. Mithril m.request doesnt allow you to customize the callback variable name
+    * 2. $.param
+    */
+   
     /**
     * Base controller with diff redraw
     */
@@ -163,8 +170,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
      */
     SolrWidget.controller = new BaseDiffController(function(args){
 
-            var self = this,
-                scope = SolrWidget.eventsMixin(this)
+            var self = this;
 
             
             /* Results */
