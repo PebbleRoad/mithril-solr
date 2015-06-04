@@ -6,7 +6,7 @@
     "Vinay <rmdort@gmail.com>"
   ],
   "description": "A front-end interface to Solr search using MithrilJS",
-  "main": ["mithril.solr.min.js", "scripts/app.js", "scripts/components/Pagination.js", "scripts/components/SearchFacets.js", "scripts/components/SearchForm.js", "scripts/components/SearchResults.js", "scripts/components/SearchSelectedFacets.js"],
+  "main": "mithril.solr.min.js",
   "keywords": [
     "solr",
     "mithril",
