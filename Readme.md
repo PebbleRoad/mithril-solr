@@ -1,6 +1,6 @@
 # Front end Interface to Solr Data Source
 
-A simple UI for any Solr Endpoint
+A simple UI for any Solr Endpoint. Just 6KB minified
 
 1. Customizable search results listing
 2. Support Faceting
@@ -13,6 +13,10 @@ A simple UI for any Solr Endpoint
 1. Clone the repository
     
         git clone git@github.com:PebbleRoad/mithril-solr.git
+
+2. Install bower dependency - Mithril JS
+        
+        bower install
    
 2. Add the script tags in your html pages
 
@@ -27,6 +31,7 @@ A simple UI for any Solr Endpoint
         <script>
           /**
            * Fields
+           * @type {Object}
            */
           
           
@@ -45,17 +50,20 @@ A simple UI for any Solr Endpoint
               'section_s': 'Section',
               'year_s': 'Year'
           }
-          
-          
+
+          /**
+           * Your App
+           * @type {Object}
+           */
           var app = {
               controller: function(){
           
-                  this.endPoint = '/lucid';
+                  this.endPoint = 'http://momcorp.internet.dynawebsite.com/solr/mom/lucid';
           
                   this.facetFields = facetFields;
           
                   this.fields = fields;
-                        
+          
               },
               view: function(ctrl){
                   return [

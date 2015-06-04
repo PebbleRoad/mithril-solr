@@ -47,7 +47,7 @@ gulp.task('html', function () {
 // Watch
 gulp.task('watch', function () {
     gulp.watch(['./*.html'], ['html']);
-    gulp.watch(['./jade/*.jade'], ['jade']);
+    //gulp.watch(['./jade/*.jade'], ['jade']);
 });
 
 // Default task

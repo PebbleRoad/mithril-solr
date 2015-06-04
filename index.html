@@ -74,13 +74,9 @@
     <script>
       /**
        * Fields
+       * @type {Object}
        */
       
-      //- var fields = {
-      //-     title: 'invention_title_en',
-      //-     summary: 'abstract_en',
-      //-     url: 'resource_name'
-      //- }
       
       var fields = {
           title   : 'navigation_title_t',
@@ -97,24 +93,19 @@
           'section_s': 'Section',
           'year_s': 'Year'
       }
-      
-      //- var facetFields = {
-      //-     'inventors_en': 'Inventors',
-      //-     'ipcr_classifications': 'ipcr_classifications',
-      //-     'kind_code': 'Kind'
-      //- }
-      
+
+      /**
+       * Your App
+       * @type {Object}
+       */
       var app = {
           controller: function(){
       
               this.endPoint = 'http://momcorp.internet.dynawebsite.com/solr/mom/lucid';
-              //this.endPoint = 'http://www.mom.gov.sg/solr/mom/lucid';
       
               this.facetFields = facetFields;
       
               this.fields = fields;
-              
-              //this.endPoint = 'http://prod1-1-elb-1mwm7bfw67zm3-1238985839.us-east-1.elb.amazonaws.com/solr/cn_patent/select';
       
           },
           view: function(ctrl){
