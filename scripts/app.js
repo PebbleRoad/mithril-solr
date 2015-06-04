@@ -388,7 +388,9 @@ var SolrWidget = (function(SolrWidget, window, undefined){
              * Search
              */
             
-            this.search = function(){
+            this.search = function(event){
+
+                event && event.preventDefault();
 
                 /* Check if there is query */
 
