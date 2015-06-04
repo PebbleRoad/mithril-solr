@@ -1,6 +1,6 @@
-# Front end Interfacet to Solr Data Source
+# Front end Interface to Solr Data Source
 
-A simple UI for any solr End point
+A simple UI for any Solr Endpoint
 
 1. Customizable search results listing
 2. Support Faceting
