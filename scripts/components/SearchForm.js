@@ -17,7 +17,7 @@
                         type: "text",
                         defaultValue: args.q(),
                         onchange: m.withAttr('value', args.q),
-                        placeholder: "Start typing to see instant results"
+                        placeholder: "Enter a keyword"
                     }),
                     m('button', args.isSearching? 'Searching' : 'Search')
                 ]),
