@@ -13,17 +13,13 @@ A simple UI for any Solr Endpoint. Just 6KB minified
 1. Clone the repository
     
         git clone git@github.com:PebbleRoad/mithril-solr.git
-
-2. Install bower dependency - Mithril JS
-        
-        bower install
    
 2. Add the script tags in your html pages
 
         <div id="Search"></div>
         
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="bower_components/mithril/mithril.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.0/mithril.min.js"></script>
         <script src="mithril.solr.min.js"></script>
 
 3. Initialize your Solr App
