@@ -1,0 +1,24 @@
+{
+  "name": "mithril-solr",
+  "version": "0.0.1",
+  "homepage": "https://github.com/PebbleRoad/mithril-solr",
+  "authors": [
+    "Vinay <rmdort@gmail.com>"
+  ],
+  "description": "A front-end interface to Solr search using MithrilJS",
+  "main": ["mithril.solr.min.js", "scripts/app.js", "scripts/components/Pagination.js", "scripts/components/SearchFacets.js", "scripts/components/SearchForm.js", "scripts/components/SearchResults.js", "scripts/components/SearchSelectedFacets.js"],
+  "keywords": [
+    "solr",
+    "mithril",
+    "search",
+    "ui"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
