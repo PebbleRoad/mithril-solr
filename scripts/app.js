@@ -52,7 +52,6 @@ var SolrWidget = (function(SolrWidget, window, undefined){
         return decodeURIComponent(text).replace(/\+/g, ' ');
     }
 
-
     /**
      * Build Query Strings
      */
@@ -103,7 +102,26 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             if(m.route.param('start') && m.route.param('rows')){
                 this.currentPage(Math.ceil(m.route.param('start')/m.route.param('rows')))
             }
-        }        
+        },
+
+        getFacetProp:  function(name, prop){
+
+            var title = '';
+
+            for(var i = 0; i < SolrWidget.vm.facetFields.length; i++){
+                
+                if(SolrWidget.vm.facetFields[i]['name'] == name) title = SolrWidget.vm.facetFields[i][prop]
+            }
+
+            return title
+        },
+
+        sanitize: function(str){
+
+            /* Removes quotes at the beginning and end of string */
+
+            return str.replace(/^\"|\"$/gi, '');
+        }
     };
 
 
@@ -149,7 +167,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     m.component(SolrWidget.SearchFacets, {                        
                         facets      : SolrWidget.vm.facets,
                         facetFields : args.facetFields,
-                        onSelect    : ctrl.facetSelect
+                        onSelect    : ctrl.selectFacet
                     }),
                     m.component(SolrWidget.SearchResults, { 
                         docs   : SolrWidget.vm.docs,
@@ -190,12 +208,18 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
             this.facetFields = [];
 
+            /* Transfer to VM */
+
+            SolrWidget.vm.facetFields = args.facetFields;
+
+            /* Add facetfields to controller */
+
             if(args.facetFields){
 
-                for(var f in args.facetFields){
+                for(var i = 0; i < args.facetFields.length; i++){
                     this.facetFields.push({
                         name: 'facet.field',
-                        value: f
+                        value: args.facetFields[i].name,
                     })
                 }
             }
@@ -231,10 +255,8 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
                 event && event.preventDefault();
 
-                for(var i = 0; i < this.selectedFacets.length; i++){
-
-                    if(this.selectedFacets[i].value == f.value){
-
+                for(var i = 0; i < this.selectedFacets.length; i++){                    
+                    if(this.selectedFacets[i].value == f.fullValue){
                         this.selectedFacets.splice(i, 1);
                     }
                 }
@@ -253,9 +275,9 @@ var SolrWidget = (function(SolrWidget, window, undefined){
              * Handle facet selection
              */
             
-            this.facetSelect = function(type, f, event){
+            this.selectFacet = function(type, f, event){
 
-                event && event.preventDefault();
+                event && event.preventDefault();                
                 
                 this.selectedFacets.push({
                     name: 'fq',
