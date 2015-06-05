@@ -27,23 +27,40 @@ A simple UI for any Solr Endpoint. Just 6KB minified
            * Fields
            * @type {Object}
            */
-          
-          
+
           var fields = {
-              title   : 'navigation_title_t',
-              summary : 'document_config_summary_t',
-              url     : 'navurl_s'
+              title   : 'alternate_title',
+              summary : 'abstract',
+              url     : 'presentation_url'
           };
           
           /**
            * Facets
-           * @type {Object}
+           * @type {Array}
            */
-          var facetFields = {
-              'contenttype_s': 'Content type',
-              'section_s': 'Section',
-              'year_s': 'Year'
-          }
+          
+          var facetFields = [
+            {
+              name: 'region',
+              displayName: 'Region',
+              type: 'string'
+            },
+            {
+              name: 'function',
+              displayName: 'Function',
+              type: 'string'
+            },
+            {
+              name: 'localtype',
+              displayName: 'Region',
+              type: 'string'
+            },
+            {
+              name: 'toDate',
+              displayName: 'Date',
+              type: 'date'
+            }
+          ]
 
           /**
            * Your App
@@ -52,7 +69,7 @@ A simple UI for any Solr Endpoint. Just 6KB minified
           var app = {
               controller: function(){
           
-                  this.endPoint = 'http://momcorp.internet.dynawebsite.com/solr/mom/lucid';
+                  this.endPoint = 'https://data.esrc.unimelb.edu.au/solr/FACP/select';
           
                   this.facetFields = facetFields;
           
