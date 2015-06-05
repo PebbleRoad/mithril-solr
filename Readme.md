@@ -16,8 +16,7 @@ A simple UI for any Solr Endpoint. Just 6KB minified
 2. Add the script tags in your html pages
 
         <div id="Search"></div>
-        
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                
         <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/0.2.0/mithril.min.js"></script>
         <script src="mithril.solr.min.js"></script>
 
