@@ -127,7 +127,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             return m('.msolr', [
                 
                 m.component(SolrWidget.SearchForm, { 
-                    onSubmit    : ctrl.route, 
+                    onSubmit    : ctrl.formSubmit, 
                     isSearching : SolrWidget.vm.isSearching,
                     q           : SolrWidget.vm.q,
                     numFound : SolrWidget.vm.numFound
@@ -467,6 +467,25 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
                 return SolrWidget.cache[key]
 
+            }.bind(this);
+
+
+            /**
+             * Form Submission
+             */
+            
+            this.formSubmit = function(event){
+
+                event && event.preventDefault();
+
+                /* Check if there is query */
+
+                if(!SolrWidget.vm.q()) return;
+
+                /* Route */
+
+                this.route();
+                
             }.bind(this)
 
             /* Fetch only if there is a query */
