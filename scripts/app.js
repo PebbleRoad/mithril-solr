@@ -1,6 +1,5 @@
 var SolrWidget = (function(SolrWidget, window, undefined){
 
- 
 
     /**
     * Has the following components
@@ -17,13 +16,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
     * q, rows, start
     */
    
-
-   /**
-    * jQuery Functions used
-    * 1. $.ajax for JSONP. Mithril m.request doesnt allow you to customize the callback variable name
-    * 2. $.param
-    */
-   
+  
     /**
     * Base controller with diff redraw
     */
@@ -43,10 +36,6 @@ var SolrWidget = (function(SolrWidget, window, undefined){
         {
             name: 'wt',
             value: 'json'
-        }
-        ,{
-            name: 'json.wrf',
-            value: 'callback'
         }        
         ,{
             name: 'facet',
@@ -61,6 +50,25 @@ var SolrWidget = (function(SolrWidget, window, undefined){
     function decoder(text){
 
         return decodeURIComponent(text).replace(/\+/g, ' ');
+    }
+
+
+    /**
+     * Build Query Strings
+     */
+    
+    function buildQueryString(obj){
+
+        var str = []
+
+        for(var i = 0; i < obj.length; i++){
+            str.push(
+                encodeURIComponent(obj[i]['name']) + "=" + 
+                encodeURIComponent(obj[i]['value'])
+            )
+        }
+        
+        return str.join('&')
     }
    
    /**
@@ -119,7 +127,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             return m('.msolr', [
                 
                 m.component(SolrWidget.SearchForm, { 
-                    onSubmit    : ctrl.search, 
+                    onSubmit    : ctrl.route, 
                     isSearching : SolrWidget.vm.isSearching,
                     q           : SolrWidget.vm.q,
                     numFound : SolrWidget.vm.numFound
@@ -361,6 +369,8 @@ var SolrWidget = (function(SolrWidget, window, undefined){
                     pageParams
                 ]);                
 
+                /* Removed undefined params */
+
                 params = params.filter(function(n){ return n!= undefined })
 
                 return params;
@@ -376,7 +386,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
                 event && event.preventDefault();
 
-                queryString = $.param(this.buildParams());                
+                queryString = buildQueryString(this.buildParams());
 
                 /* Trigger a new route */
 
@@ -433,7 +443,8 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             this.fetch = function(){
 
 
-                var data = this.buildParams();
+                var data = buildQueryString(this.buildParams());
+                
 
                 /* Create cache key */
 
@@ -441,13 +452,13 @@ var SolrWidget = (function(SolrWidget, window, undefined){
 
                 if(!SolrWidget.cache[key]){
 
-                    SolrWidget.cache[key] = $.ajax({
-                        url           : args.endPoint,
-                        data          : data,
-                        dataType      : 'jsonp',
-                        jsonpCallback : 'callback'                        
+                    SolrWidget.cache[key] = m.request({
+                        url         : args.endPoint + '?' + data,
+                        dataType    : 'jsonp',
+                        callbackKey : 'json.wrf',
+                        background  : true
                     })
-                    .done(function(results){
+                    .then(function(results){
                         
                         return results
                         
@@ -490,13 +501,7 @@ var SolrWidget = (function(SolrWidget, window, undefined){
             }
     });
 
-    /**
-     * NOOP Callback
-     * @return {Function} [description]
-     */
-    function callback(){}
     
-
     return SolrWidget;
 
 })(SolrWidget || {}, window);
