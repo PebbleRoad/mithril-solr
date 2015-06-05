@@ -3,9 +3,8 @@
 A simple UI for any Solr Endpoint. Just 6KB minified
 
 1. Customizable search results listing
-2. Support Faceting
-3. Support URL hash or HTML5 pushstate
-4. Runs on Mithril JS
+2. Supports Faceting
+3. Supports URL hash or HTML5 pushstate
 
 
 ## Install
